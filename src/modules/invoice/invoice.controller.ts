@@ -18,19 +18,17 @@ export class InvoiceController extends BaseController {
     public async getList(
         @Req() req: AuthenticatedRequest,
         @Res() res: Response<APIListResponse<InvoiceListItemDTO>>,
-        @Query() query: { start_date?: string; end_date?: string },
+        @Query() query: { start_date?: string; end_date?: string; page?: number },
     ) {
         try {
             const total = await this._invoiceService.getTotal(query);
-            if (total <= 0) {
-                const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
-                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
-            }
-
-            const list = await this._invoiceService.getList(query);
-            if (!Helpers.isFilledArray(list)) {
-                const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
-                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            let list: InvoiceListItemDTO[] = [];
+            if (total > 0) {
+                list = await this._invoiceService.getList(query);
+                if (!Helpers.isFilledArray(list)) {
+                    const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
+                    return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+                }
             }
 
             const successRes = APIListResponse.success<InvoiceListItemDTO>(MESSAGES.SUCCESS.SUCCESS, list, total);
@@ -38,6 +36,23 @@ export class InvoiceController extends BaseController {
         } catch (e) {
             this._logger.error(this.getList.name, e);
             const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.INVOICE.TOTAL_PRICE)
+    public async getTotalPrice(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIResponse<number>>,
+        @Query() query: { start_date?: string; end_date?: string },
+    ) {
+        try {
+            const totalPrice = await this._invoiceService.getTotalPrice(query);
+            const successRes = APIResponse.success<number>(MESSAGES.SUCCESS.SUCCESS, totalPrice);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getList.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
     }

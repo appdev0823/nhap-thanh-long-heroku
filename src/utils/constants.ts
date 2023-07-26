@@ -11,7 +11,7 @@ const CONSTANTS = {
     /** 7 days */
     ACCESS_TOKEN_EXPIRED_TIME: 604800,
     /** Total items per page  */
-    ITEM_COUNT_PER_PAGE: 20,
+    PAGE_SIZE: 20,
     USER_ROLES: {
         REGULAR: 0,
         ADMIN: 1,

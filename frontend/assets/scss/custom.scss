@@ -22,3 +22,13 @@ th {
     background-color: $primary;
     border-color: $primary;
 }
+
+.page-item.active .page-link {
+    background-color: $primary;
+    color: white;
+}
+
+.page-item .page-link {
+    background-color: white;
+    color: $primary;
+}

@@ -17,10 +17,10 @@ export class ProductService extends BaseService {
     public async getList(params: CommonSearchQuery) {
         const query = this._productRepo.createQueryBuilder('product').where('product.is_deleted = 0').orderBy('product.order', 'ASC');
 
-        if (params?.page > 0) {
+        if (Number(params?.page) > 0) {
             const page = Number(params?.page);
-            const skip = (page - 1) * CONSTANTS.ITEM_COUNT_PER_PAGE;
-            query.skip(skip).take(CONSTANTS.ITEM_COUNT_PER_PAGE);
+            const offset = (page - 1) * CONSTANTS.PAGE_SIZE;
+            query.offset(offset).limit(CONSTANTS.PAGE_SIZE);
         }
 
         const list = await query.getMany();

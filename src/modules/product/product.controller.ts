@@ -18,15 +18,13 @@ export class ProductController extends BaseController {
     public async getList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<ProductDTO>>, @Query() query: CommonSearchQuery) {
         try {
             const total = await this._productService.getTotal();
-            if (total <= 0) {
-                const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
-                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
-            }
-
-            const list = await this._productService.getList(query);
-            if (!Helpers.isFilledArray(list)) {
-                const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
-                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            let list: ProductDTO[] = [];
+            if (total > 0) {
+                list = await this._productService.getList(query);
+                if (!Helpers.isFilledArray(list)) {
+                    const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
+                    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+                }
             }
 
             const successRes = APIListResponse.success<ProductDTO>(MESSAGES.SUCCESS.SUCCESS, list, total);

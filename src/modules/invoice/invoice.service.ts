@@ -3,7 +3,7 @@ import { InvoiceDTO, InvoiceListItemDTO, InvoiceSaveDTO } from 'src/dtos';
 import { InvoiceEntity } from 'src/entities';
 import { BaseService } from 'src/includes';
 import { InvoiceRepository, ProductRepository } from 'src/repository';
-import { Helpers, mapper } from 'src/utils';
+import { CONSTANTS, Helpers, mapper } from 'src/utils';
 import { DataSource, In } from 'typeorm';
 
 @Injectable()
@@ -58,7 +58,7 @@ export class InvoiceService extends BaseService {
         }
     }
 
-    public async getList(params: { start_date?: string; end_date?: string }) {
+    public async getList(params: { start_date?: string; end_date?: string; page?: number }) {
         const query = this._invoiceRepo
             .createQueryBuilder('invoice')
             .select('invoice.*')
@@ -77,11 +77,11 @@ export class InvoiceService extends BaseService {
 
         query.orderBy('invoice.id', 'DESC');
 
-        // if (params?.page > 0) {
-        //     const page = Number(params?.page);
-        //     const skip = (page - 1) * CONSTANTS.ITEM_COUNT_PER_PAGE;
-        //     query.skip(skip).take(CONSTANTS.ITEM_COUNT_PER_PAGE);
-        // }
+        if (Number(params?.page) > 0) {
+            const page = Number(params?.page);
+            const offset = (page - 1) * CONSTANTS.PAGE_SIZE;
+            query.offset(offset).limit(CONSTANTS.PAGE_SIZE);
+        }
 
         const result = await query.getRawMany();
         return Helpers.isFilledArray(result) ? (result as InvoiceListItemDTO[]) : [];
@@ -91,14 +91,34 @@ export class InvoiceService extends BaseService {
         const query = this._invoiceRepo.createQueryBuilder('invoice').where('invoice.is_deleted = 0');
 
         if (Helpers.isString(params.start_date)) {
-            query.where('invoice.created_date >= :start_date', { start_date: `${params.start_date} 00:00:00` });
+            query.andWhere('invoice.created_date >= :start_date', { start_date: `${params.start_date} 00:00:00` });
         }
 
         if (Helpers.isString(params.end_date)) {
-            query.where('invoice.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
+            query.andWhere('invoice.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
         }
 
         return query.getCount();
+    }
+
+    public async getTotalPrice(params: { start_date?: string; end_date?: string }) {
+        const query = this._invoiceRepo
+            .createQueryBuilder('invoice')
+            .select('SUM(invoice.total_price) as total_price')
+            .where('invoice.is_deleted = 0');
+
+        if (Helpers.isString(params.start_date)) {
+            query.andWhere('invoice.created_date >= :start_date', { start_date: `${params.start_date} 00:00:00` });
+        }
+
+        if (Helpers.isString(params.end_date)) {
+            query.andWhere('invoice.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
+        }
+
+        const result = await query.getRawOne<{ total_price: number }>();
+        if (Helpers.isEmptyObject(result)) return 0;
+
+        return result.total_price || 0;
     }
 
     public async getById(id: number): Promise<InvoiceDTO | null> {
