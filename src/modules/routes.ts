@@ -21,7 +21,8 @@ const ROUTES = {
     INVOICE: {
         MODULE: 'invoice',
         LIST: '',
-        TOTAL_PRICE: 'total-price',
+        TOTAL_STATS: 'total-stats',
+        DETAIL: ':id',
         CREATE: '',
         DELETE: ':id',
     },

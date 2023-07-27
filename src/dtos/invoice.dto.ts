@@ -1,5 +1,5 @@
 import { AutoMap } from '@automapper/classes';
-import { ProductDTO } from './product.dto';
+import { InvoiceProductDTO } from './invoice-product.dto';
 
 export class InvoiceSaveDTO {
     customer_id = '';
@@ -13,7 +13,7 @@ export class InvoiceSaveDTO {
         [null, null, null, null, null, null],
         [null, null, null, null, null, null],
     ];
-    product_list: (Pick<ProductDTO, 'id' | 'name' | 'price'> & { weight: 0 })[] = [];
+    product_list: InvoiceProductDTO[] = [];
     total_price = 0;
     total_weight = 0;
     created_by = '';
@@ -24,7 +24,6 @@ export class InvoiceDTO {
     @AutoMap() customer_id: string;
     @AutoMap() customer_name: string;
     @AutoMap() weight_grid: string;
-    @AutoMap() product_list: string;
     @AutoMap() total_weight: number;
     @AutoMap() total_price: number;
     @AutoMap() is_paid: 0 | 1;
@@ -36,4 +35,28 @@ export class InvoiceDTO {
 
 export class InvoiceListItemDTO extends InvoiceDTO {
     user_name: string;
+}
+
+export class InvoiceDetailDTO {
+    id = 0;
+    customer_id = '';
+    customer_name = '';
+    weight_grid: (number | null)[][] = [
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+    ];
+    product_list: InvoiceProductDTO[] = [];
+    total_weight = 0;
+    total_price = 0;
+    is_paid = 1;
+    is_deleted = 0;
+    created_by = '';
+    user_name = '';
+    created_date = '';
+    updated_date = '';
 }

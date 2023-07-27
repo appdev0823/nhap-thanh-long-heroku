@@ -48,7 +48,7 @@ export class ProductController extends BaseController {
             const successRes = APIResponse.success<ProductDTO>(MESSAGES.SUCCESS.SUCCESS, item);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.getList.name, e);
+            this._logger.error(this.getDetail.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -105,7 +105,7 @@ export class ProductController extends BaseController {
             const successRes = APIResponse.success<void>(MESSAGES.SUCCESS.SUCCESS);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.create.name, e);
+            this._logger.error(this.updateOrder.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -139,7 +139,7 @@ export class ProductController extends BaseController {
             const successRes = APIResponse.success<ProductDTO | undefined>(MESSAGES.SUCCESS.SUCCESS, result);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.create.name, e);
+            this._logger.error(this.update.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -163,7 +163,7 @@ export class ProductController extends BaseController {
             const successRes = APIResponse.success<ProductDTO | undefined>(MESSAGES.SUCCESS.SUCCESS, result);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.create.name, e);
+            this._logger.error(this.delete.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

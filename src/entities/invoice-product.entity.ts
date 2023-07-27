@@ -2,43 +2,43 @@ import { AutoMap } from '@automapper/classes';
 import { CONSTANTS, Helpers } from 'src/utils';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('d_invoices')
-export class InvoiceEntity {
+@Entity('d_invoice_products')
+export class InvoiceProductEntity {
     @PrimaryGeneratedColumn('increment', { type: 'bigint' })
     @AutoMap()
         id: number;
 
-    @Column({ type: 'varchar', length: 255 })
+    @Column({ type: 'bigint' })
     @AutoMap()
-        customer_id: string;
+        invoice_id: number;
+
+    @Column({ type: 'bigint' })
+    @AutoMap()
+        product_id: number;
 
     @Column({ type: 'varchar', length: 255 })
     @AutoMap()
-        customer_name: string;
-
-    @Column({ type: 'text' })
-    @AutoMap()
-        weight_grid: string;
-
-    @Column({ type: 'decimal', precision: 15, scale: 3 })
-    @AutoMap()
-        total_weight: number;
+        product_name: string;
 
     @Column({ type: 'decimal', precision: 15, scale: 0 })
     @AutoMap()
-        total_price: number;
+        product_price: number;
 
-    @Column({ type: 'tinyint', default: 1 })
+    @Column({ type: 'tinyint' })
     @AutoMap()
-        is_paid: 0 | 1;
+        product_order: number;
+
+    @Column({ type: 'decimal', precision: 15, scale: 3 })
+    @AutoMap()
+        product_weight: number;
+
+    @Column({ type: 'tinyint', default: 0 })
+    @AutoMap()
+        product_is_original: 0 | 1;
 
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()
         is_deleted: 0 | 1;
-
-    @Column({ type: 'varchar', length: 255 })
-    @AutoMap()
-        created_by: string;
 
     @CreateDateColumn({ type: 'datetime' })
     @AutoMap()

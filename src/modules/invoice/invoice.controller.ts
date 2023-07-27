@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { InvoiceDTO, InvoiceListItemDTO, InvoiceSaveDTO } from 'src/dtos';
+import { InvoiceDTO, InvoiceDetailDTO, InvoiceListItemDTO, InvoiceSaveDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { APIListResponse, APIResponse, Helpers, MESSAGES } from 'src/utils';
 import { AuthenticatedRequest } from 'src/utils/types';
@@ -40,18 +40,41 @@ export class InvoiceController extends BaseController {
         }
     }
 
-    @Get(ROUTES.INVOICE.TOTAL_PRICE)
-    public async getTotalPrice(
+    @Get(ROUTES.INVOICE.TOTAL_STATS)
+    public async getTotalStats(
         @Req() req: AuthenticatedRequest,
-        @Res() res: Response<APIResponse<number>>,
+        @Res() res: Response<APIResponse<{ total_price: number; total_weight: number } | null>>,
         @Query() query: { start_date?: string; end_date?: string },
     ) {
         try {
-            const totalPrice = await this._invoiceService.getTotalPrice(query);
-            const successRes = APIResponse.success<number>(MESSAGES.SUCCESS.SUCCESS, totalPrice);
+            const stats = await this._invoiceService.getTotalStats(query);
+            if (!stats) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+                return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+            }
+
+            const successRes = APIResponse.success<{ total_price: number; total_weight: number }>(MESSAGES.SUCCESS.SUCCESS, stats);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.getList.name, e);
+            this._logger.error(this.getTotalStats.name, e);
+            const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.INVOICE.DETAIL)
+    public async getDetail(@Param('id') id: number, @Req() req: AuthenticatedRequest, @Res() res: Response<APIResponse<InvoiceDetailDTO | null>>) {
+        try {
+            const item = await this._invoiceService.getDetail(id);
+            if (!item) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_NOT_FOUND);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+
+            const successRes = APIResponse.success<InvoiceDetailDTO>(MESSAGES.SUCCESS.SUCCESS, item);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getDetail.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -94,7 +117,7 @@ export class InvoiceController extends BaseController {
             const successRes = APIResponse.success<InvoiceDTO | undefined>(MESSAGES.SUCCESS.SUCCESS, result);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.create.name, e);
+            this._logger.error(this.delete.name, e);
             const errRes = APIResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
