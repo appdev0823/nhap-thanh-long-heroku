@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { InvoiceDTO, InvoiceDetailDTO, InvoiceListItemDTO, InvoiceSaveDTO } from 'src/dtos';
+import { CustomerDTO, InvoiceDTO, InvoiceDateStatsDTO, InvoiceDetailDTO, InvoiceListItemDTO, InvoiceSaveDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { APIListResponse, APIResponse, Helpers, MESSAGES } from 'src/utils';
 import { AuthenticatedRequest } from 'src/utils/types';
@@ -18,7 +18,7 @@ export class InvoiceController extends BaseController {
     public async getList(
         @Req() req: AuthenticatedRequest,
         @Res() res: Response<APIListResponse<InvoiceListItemDTO>>,
-        @Query() query: { start_date?: string; end_date?: string; page?: number },
+        @Query() query: { start_date?: string; end_date?: string; customer_id_list?: string[]; page?: number },
     ) {
         try {
             const total = await this._invoiceService.getTotal(query);
@@ -35,6 +35,45 @@ export class InvoiceController extends BaseController {
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.getList.name, e);
+            const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.INVOICE.DATE_STATS_LIST)
+    public async getDateStatsList(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIListResponse<InvoiceDateStatsDTO>>,
+        @Query() query: { start_date: string; end_date: string; page?: number },
+    ) {
+        try {
+            const total = await this._invoiceService.getDateStatsCount(query);
+            let list: InvoiceDateStatsDTO[] = [];
+            if (total > 0) {
+                list = await this._invoiceService.getDateStatsList(query);
+                if (!Helpers.isFilledArray(list)) {
+                    const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_NO_DATA);
+                    return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+                }
+            }
+
+            const successRes = APIListResponse.success<InvoiceDateStatsDTO>(MESSAGES.SUCCESS.SUCCESS, list, total);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getDateStatsList.name, e);
+            const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.INVOICE.CUSTOMER_LIST)
+    public async getCustomerList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<CustomerDTO>>) {
+        try {
+            const list = await this._invoiceService.getCustomerList();
+            const successRes = APIListResponse.success<CustomerDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getDateStatsList.name, e);
             const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

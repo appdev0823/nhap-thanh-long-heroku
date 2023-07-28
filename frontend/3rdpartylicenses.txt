@@ -573,6 +573,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 
+@ng-select/ng-select
+MIT
+
 @ngrx/effects
 MIT
 The MIT License (MIT)

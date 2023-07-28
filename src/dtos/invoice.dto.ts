@@ -60,3 +60,14 @@ export class InvoiceDetailDTO {
     created_date = '';
     updated_date = '';
 }
+
+export class InvoiceDateStatsDTO {
+    date = '';
+    total_weight = 0;
+    total_price = 0;
+}
+
+export class CustomerDTO {
+    @AutoMap() customer_id: string;
+    @AutoMap() customer_name: string;
+}

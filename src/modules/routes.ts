@@ -21,6 +21,8 @@ const ROUTES = {
     INVOICE: {
         MODULE: 'invoice',
         LIST: '',
+        DATE_STATS_LIST: 'date-stats-list',
+        CUSTOMER_LIST: 'customer-list',
         TOTAL_STATS: 'total-stats',
         DETAIL: ':id',
         CREATE: '',

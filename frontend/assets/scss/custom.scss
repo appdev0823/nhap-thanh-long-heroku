@@ -36,3 +36,7 @@ th {
 .text-primary {
     color: $primary !important;
 }
+
+ngb-pagination .pagination {
+    margin-bottom: 0;
+}

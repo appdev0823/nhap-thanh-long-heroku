@@ -5,7 +5,7 @@ import { mapper } from 'src/utils/mapper';
 
 import { UserDTO } from './user.dto';
 import { ProductDTO } from './product.dto';
-import { InvoiceDTO } from './invoice.dto';
+import { CustomerDTO, InvoiceDTO } from './invoice.dto';
 import { InvoiceProductDTO } from './invoice-product.dto';
 
 export * from './user.dto';
@@ -28,4 +28,7 @@ export const initMapper = () => {
 
     createMap(mapper, InvoiceProductEntity, InvoiceProductDTO);
     createMap(mapper, InvoiceProductDTO, InvoiceProductEntity);
+
+    createMap(mapper, InvoiceEntity, CustomerDTO);
+    createMap(mapper, CustomerDTO, InvoiceEntity);
 };
