@@ -185,3 +185,17 @@ label.required::after {
     content: "*";
     color: $danger;
 }
+
+app-invoice-print {
+    display: none;
+}
+
+@media print {
+    app-invoice-print {
+        display: block;
+    }
+
+    app-main-layout, app-toast {
+        display: none;
+    }
+}
