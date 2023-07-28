@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProductDTO } from 'src/dtos';
-import { ProductEntity } from 'src/entities';
+import { ProductDTO, ProductStatsDTO } from 'src/dtos';
+import { InvoiceProductEntity, ProductEntity } from 'src/entities';
 import { BaseService } from 'src/includes';
 import { ProductRepository } from 'src/repository';
 import { CONSTANTS, Helpers, mapper } from 'src/utils';
@@ -103,5 +103,30 @@ export class ProductService extends BaseService {
         await this._productRepo.save(prodList);
 
         return true;
+    }
+
+    public async getStatsList(params: { start_date: string; end_date: string }) {
+        const query = this._productRepo
+            .createQueryBuilder('product')
+            .select('product.*')
+            .addSelect('IFNULL(SUM(invoice_product.product_weight), 0) as total_weight')
+            .leftJoin(
+                InvoiceProductEntity,
+                'invoice_product',
+                `
+                invoice_product.product_id = product.id AND
+                invoice_product.created_date >= :start_date AND
+                invoice_product.created_date <= :end_date
+            `,
+                {
+                    start_date: `${params.start_date} 00:00:00`,
+                    end_date: `${params.end_date} 23:59:59`,
+                },
+            );
+
+        query.where('product.is_deleted = 0').groupBy('product.id').orderBy('product.order', 'ASC');
+
+        const result = await query.getRawMany<ProductStatsDTO>();
+        return Helpers.isFilledArray(result) ? result : [];
     }
 }

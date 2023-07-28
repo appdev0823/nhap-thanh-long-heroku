@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { ProductDTO } from 'src/dtos';
+import { ProductDTO, ProductStatsDTO } from 'src/dtos';
 import { BaseController } from 'src/includes';
 import { APIListResponse, APIResponse, Helpers, MESSAGES } from 'src/utils';
 import { AuthenticatedRequest, CommonSearchQuery } from 'src/utils/types';
@@ -28,6 +28,23 @@ export class ProductController extends BaseController {
             }
 
             const successRes = APIListResponse.success<ProductDTO>(MESSAGES.SUCCESS.SUCCESS, list, total);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getList.name, e);
+            const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
+    @Get(ROUTES.PRODUCT.STATS_LIST)
+    public async getStatsList(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIListResponse<ProductStatsDTO>>,
+        @Query() query: { start_date: string; end_date: string },
+    ) {
+        try {
+            const list = await this._productService.getStatsList(query);
+            const successRes = APIListResponse.success<ProductStatsDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
             this._logger.error(this.getList.name, e);

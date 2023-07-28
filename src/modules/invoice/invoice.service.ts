@@ -240,8 +240,44 @@ export class InvoiceService extends BaseService {
         return Helpers.isFilledArray(result) ? result : [];
     }
 
+    public async getMonthStatsList(params: { start_date: string; end_date: string }) {
+        const monthList = Helpers.getDateListInRange(params.start_date, params.end_date, 'MM/YYYY', 'month');
+        if (!Helpers.isFilledArray(monthList)) return [];
+
+        const query = this._invoiceRepo
+            .createQueryBuilder('invoice')
+            .select('DATE_FORMAT(invoice.created_date, \'%m/%Y\') as date')
+            .addSelect('IFNULL(SUM(invoice.total_weight), 0) as total_weight')
+            .addSelect('IFNULL(SUM(invoice.total_price), 0) as total_price')
+            .where('invoice.is_deleted = 0');
+
+        if (Helpers.isString(params.start_date)) {
+            query.andWhere('invoice.created_date >= :start_date', { start_date: `${params.start_date} 00:00:00` });
+        }
+
+        if (Helpers.isString(params.end_date)) {
+            query.andWhere('invoice.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
+        }
+
+        query.groupBy('DATE_FORMAT(invoice.created_date, \'%m/%Y\')').orderBy('date', 'DESC');
+
+        const result = await query.getRawMany<InvoiceDateStatsDTO>();
+        if (!Helpers.isFilledArray(result)) return [];
+
+        return monthList.map((month) => {
+            const found = result.find((stats) => stats.date === month);
+
+            const item = new InvoiceDateStatsDTO();
+            item.date = month;
+            item.total_weight = found?.total_weight || 0;
+            item.total_price = found?.total_price || 0;
+
+            return item;
+        });
+    }
+
     public async getCustomerList() {
-        const invoiceList = await this._invoiceRepo.find();
+        const invoiceList = await this._invoiceRepo.createQueryBuilder('invoice').getMany();
         return invoiceList.map((inv) => mapper.map(inv, InvoiceEntity, CustomerDTO));
     }
 

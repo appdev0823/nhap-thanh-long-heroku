@@ -12,6 +12,7 @@ const ROUTES = {
     PRODUCT: {
         MODULE: 'product',
         LIST: '',
+        STATS_LIST: 'stats-list',
         DETAIL: ':id',
         CREATE: '',
         UPDATE: ':id',
@@ -22,6 +23,7 @@ const ROUTES = {
         MODULE: 'invoice',
         LIST: '',
         DATE_STATS_LIST: 'date-stats-list',
+        MONTH_STATS_LIST: 'month-stats-list',
         CUSTOMER_LIST: 'customer-list',
         TOTAL_STATS: 'total-stats',
         DETAIL: ':id',

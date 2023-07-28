@@ -66,6 +66,23 @@ export class InvoiceController extends BaseController {
         }
     }
 
+    @Get(ROUTES.INVOICE.MONTH_STATS_LIST)
+    public async getMonthStatsList(
+        @Req() req: AuthenticatedRequest,
+        @Res() res: Response<APIListResponse<InvoiceDateStatsDTO>>,
+        @Query() query: { start_date: string; end_date: string },
+    ) {
+        try {
+            const list = await this._invoiceService.getMonthStatsList(query);
+            const successRes = APIListResponse.success<InvoiceDateStatsDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
+            return res.status(HttpStatus.OK).json(successRes);
+        } catch (e) {
+            this._logger.error(this.getDateStatsList.name, e);
+            const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
+            return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
+        }
+    }
+
     @Get(ROUTES.INVOICE.CUSTOMER_LIST)
     public async getCustomerList(@Req() req: AuthenticatedRequest, @Res() res: Response<APIListResponse<CustomerDTO>>) {
         try {

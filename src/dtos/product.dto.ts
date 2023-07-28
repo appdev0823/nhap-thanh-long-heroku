@@ -10,3 +10,7 @@ export class ProductDTO {
     @AutoMap() created_date: string;
     @AutoMap() updated_date: string;
 }
+
+export class ProductStatsDTO extends ProductDTO {
+    total_weight: number;
+}

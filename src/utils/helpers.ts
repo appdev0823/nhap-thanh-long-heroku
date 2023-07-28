@@ -1,5 +1,5 @@
-import { AnySchema, ArraySchema, ObjectSchema } from 'joi';
 import * as dayjs from 'dayjs';
+import { AnySchema, ArraySchema, ObjectSchema } from 'joi';
 
 export default class Helpers {
     /**
@@ -95,5 +95,21 @@ export default class Helpers {
      */
     static formatDate(date: Date | string | number, toFormat = 'DD/MM/YYYY') {
         return dayjs(date).format(toFormat);
+    }
+
+    static getDateListInRange(startDate: string, endDate: string, toFormat = 'DD/MM/YYYY', unit: 'day' | 'month' = 'day') {
+        const start = dayjs(startDate).startOf(unit);
+        const end = dayjs(endDate).startOf(unit);
+
+        const dateList: string[] = [];
+
+        let currentMonth = start;
+
+        while (currentMonth.isBefore(end, unit) || currentMonth.isSame(end, unit)) {
+            dateList.push(currentMonth.format('MM/YYYY'));
+            currentMonth = currentMonth.add(1, unit);
+        }
+
+        return dateList;
     }
 }
