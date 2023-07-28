@@ -38,12 +38,12 @@ export class ProductEntity {
 
     @BeforeInsert()
     beforeInsert() {
-        this.created_date = Helpers.formatDate(new Date(), CONSTANTS.MYSQL_DATETIME_FORMAT);
-        this.updated_date = Helpers.formatDate(new Date(), CONSTANTS.MYSQL_DATETIME_FORMAT);
+        this.created_date = new Date().toISOString();
+        this.updated_date = new Date().toISOString();
     }
 
     @BeforeUpdate()
     beforeUpdate() {
-        this.updated_date = Helpers.formatDate(new Date(), CONSTANTS.MYSQL_DATETIME_FORMAT);
+        this.updated_date = new Date().toISOString();
     }
 }
