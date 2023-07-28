@@ -83,7 +83,7 @@ export class InvoiceController extends BaseController {
     public async getTotalStats(
         @Req() req: AuthenticatedRequest,
         @Res() res: Response<APIResponse<{ total_price: number; total_weight: number } | null>>,
-        @Query() query: { start_date?: string; end_date?: string },
+        @Query() query: { start_date?: string; end_date?: string; customer_id_list?: string[] },
     ) {
         try {
             const stats = await this._invoiceService.getTotalStats(query);

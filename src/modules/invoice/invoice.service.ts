@@ -126,11 +126,15 @@ export class InvoiceService extends BaseService {
         return query.getCount();
     }
 
-    public async getTotalStats(params: { start_date?: string; end_date?: string }): Promise<{ total_price: number; total_weight: number } | null> {
+    public async getTotalStats(params: {
+        start_date?: string;
+        end_date?: string;
+        customer_id_list?: string[];
+    }): Promise<{ total_price: number; total_weight: number } | null> {
         const query = this._invoiceRepo
             .createQueryBuilder('invoice')
-            .select('SUM(invoice.total_price) as total_price')
-            .addSelect('SUM(invoice.total_weight) as total_weight')
+            .select('IFNULL(SUM(invoice.total_price), 0) as total_price')
+            .addSelect('IFNULL(SUM(invoice.total_weight), 0) as total_weight')
             .where('invoice.is_deleted = 0');
 
         if (Helpers.isString(params.start_date)) {
@@ -139,6 +143,10 @@ export class InvoiceService extends BaseService {
 
         if (Helpers.isString(params.end_date)) {
             query.andWhere('invoice.created_date <= :end_date', { end_date: `${params.end_date} 23:59:59` });
+        }
+
+        if (Helpers.isFilledArray(params.customer_id_list)) {
+            query.andWhere('invoice.customer_id IN (:...customer_id_list)', { customer_id_list: params.customer_id_list });
         }
 
         const result = await query.getRawOne<{ total_price: number; total_weight: number }>();
