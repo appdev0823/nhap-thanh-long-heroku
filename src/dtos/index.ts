@@ -3,7 +3,7 @@ import { createMap } from '@automapper/core';
 import { UserEntity, ProductEntity, InvoiceEntity, InvoiceProductEntity } from 'src/entities';
 import { mapper } from 'src/utils/mapper';
 
-import { UserDTO } from './user.dto';
+import { UserDTO, UserSaveDTO } from './user.dto';
 import { ProductDTO } from './product.dto';
 import { CustomerDTO, InvoiceDTO } from './invoice.dto';
 import { InvoiceProductDTO } from './invoice-product.dto';
@@ -19,6 +19,9 @@ export * from './invoice-product.dto';
 export const initMapper = () => {
     createMap(mapper, UserEntity, UserDTO);
     createMap(mapper, UserDTO, UserEntity);
+
+    createMap(mapper, UserEntity, UserSaveDTO);
+    createMap(mapper, UserSaveDTO, UserEntity);
 
     createMap(mapper, ProductEntity, ProductDTO);
     createMap(mapper, ProductDTO, ProductEntity);

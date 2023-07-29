@@ -193,9 +193,19 @@ app-invoice-print {
 @media print {
     app-invoice-print {
         display: block;
+
+        font-weight: 700;
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+
+        .table td,
+        .table th {
+            border: 1.5px solid black !important;
+        }
     }
 
-    app-main-layout, app-toast {
+    app-main-layout,
+    app-toast {
         display: none;
     }
 }

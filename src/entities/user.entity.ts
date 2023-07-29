@@ -1,5 +1,5 @@
 import { AutoMap } from '@automapper/classes';
-import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('m_users')
 export class UserEntity {
@@ -30,4 +30,15 @@ export class UserEntity {
     @UpdateDateColumn({ type: 'datetime' })
     @AutoMap()
         updated_date: string;
+
+    @BeforeInsert()
+    beforeInsert() {
+        this.created_date = new Date().toISOString();
+        this.updated_date = new Date().toISOString();
+    }
+
+    @BeforeUpdate()
+    beforeUpdate() {
+        this.updated_date = new Date().toISOString();
+    }
 }

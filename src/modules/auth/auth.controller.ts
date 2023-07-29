@@ -23,18 +23,19 @@ export class AuthController extends BaseController {
     @Post(ROUTES.AUTH.LOGIN)
     @UsePipes(new ValidationPipe(AuthSchemas.loginSchema))
     public async login(
-        @Body() body: {
-            username: string;
-            password: string;
-        },
+        @Body() body: { username: string; password: string },
         @Res() res: Response<APIResponse<(UserDTO & { access_token: string }) | undefined>>,
     ) {
         try {
             const { username, password } = body;
             const loginRes = await this._authService.login(username, password);
             if (!loginRes) {
-                const loginErrRes = APIResponse.error(MESSAGES.ERROR.ERR_LOGIN);
-                return res.status(HttpStatus.BAD_GATEWAY).json(loginErrRes);
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_LOGIN);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
+            }
+            if (!loginRes.is_active) {
+                const errRes = APIResponse.error(MESSAGES.ERROR.ERR_USER_DEACTIVATED);
+                return res.status(HttpStatus.BAD_REQUEST).json(errRes);
             }
 
             const successRes = APIResponse.success(MESSAGES.SUCCESS.SUCCESS, loginRes);

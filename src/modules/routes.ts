@@ -8,6 +8,11 @@ const ROUTES = {
     USER: {
         MODULE: 'user',
         PROFILE: 'profile',
+        LIST: '',
+        DETAIL: ':username',
+        CREATE: '',
+        UPDATE: ':username',
+        TOGGLE: '/toggle/:username',
     },
     PRODUCT: {
         MODULE: 'product',

@@ -28,3 +28,10 @@ export class UserDTO {
         );
     }
 }
+
+export class UserSaveDTO {
+    @AutoMap() username: string;
+    @AutoMap() name: string;
+    @AutoMap() password: string;
+    @AutoMap() is_active: 0 | 1;
+}

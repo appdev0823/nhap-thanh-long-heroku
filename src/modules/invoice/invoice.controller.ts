@@ -77,7 +77,7 @@ export class InvoiceController extends BaseController {
             const successRes = APIListResponse.success<InvoiceDateStatsDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.getDateStatsList.name, e);
+            this._logger.error(this.getMonthStatsList.name, e);
             const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
@@ -90,7 +90,7 @@ export class InvoiceController extends BaseController {
             const successRes = APIListResponse.success<CustomerDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.getDateStatsList.name, e);
+            this._logger.error(this.getCustomerList.name, e);
             const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }

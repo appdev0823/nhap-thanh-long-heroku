@@ -39,7 +39,8 @@
         "minlength": "Độ dài phải lớn hơn {{num}}",
         "maxlength": "Độ dài phải nhỏ hơn {{num}}",
         "min": "{{name}} phải lớn hơn {{num}}",
-        "max": "{{name}} phải nhỏ hơn {{num}}"
+        "max": "{{name}} phải nhỏ hơn {{num}}",
+        "password": "{{field}} không chứa ký tự đặc biệt và khoảng trắng."
     },
     "message": {
         "success": "Thành công",
@@ -47,10 +48,14 @@
         "err_unknown_client_error": "Lỗi máy khách không xác định. Vui lòng thử lại sau!",
         "err_login": "Thông tin đăng nhập không chính xác",
         "err_no_data": "Không tìm thấy dữ liệu",
+        "err_username_existed": "Tên tài khoản đã tồn tại.",
+        "err_user_deactivated": "Tài khoản đã bị ngưng kích hoạt.",
         "offline": "Bạn hiện đang offline!",
         "online": "Bạn hiện đang online!",
         "confirm_delete": "Bạn có chắc chắn muốn xóa không ?",
         "save_successfully": "Lưu thành công",
-        "delete_successfully": "Xóa thành công"
+        "delete_successfully": "Xóa thành công",
+        "confirm_activate_user": "Bạn có chắc chắn muốn kích hoạt người dùng này ?",
+        "confirm_deactivate_user": "Bạn có chắc chắn muốn ngưng kích hoạt người dùng này ?"
     }
 }

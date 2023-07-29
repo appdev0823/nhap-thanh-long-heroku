@@ -47,7 +47,7 @@ export class ProductController extends BaseController {
             const successRes = APIListResponse.success<ProductStatsDTO>(MESSAGES.SUCCESS.SUCCESS, list, list.length);
             return res.status(HttpStatus.OK).json(successRes);
         } catch (e) {
-            this._logger.error(this.getList.name, e);
+            this._logger.error(this.getStatsList.name, e);
             const errRes = APIListResponse.error(MESSAGES.ERROR.ERR_INTERNAL_SERVER_ERROR);
             return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(errRes);
         }
