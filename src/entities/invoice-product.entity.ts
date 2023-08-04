@@ -1,5 +1,4 @@
 import { AutoMap } from '@automapper/classes';
-import { CONSTANTS, Helpers } from 'src/utils';
 import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('d_invoice_products')
@@ -31,6 +30,10 @@ export class InvoiceProductEntity {
     @Column({ type: 'decimal', precision: 15, scale: 3 })
     @AutoMap()
         product_weight: number;
+
+    @Column({ type: 'text' })
+    @AutoMap()
+        product_weight_list: string;
 
     @Column({ type: 'tinyint', default: 0 })
     @AutoMap()

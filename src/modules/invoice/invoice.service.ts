@@ -59,6 +59,7 @@ export class InvoiceService extends BaseService {
                     invProd.product_price = prod.product_price;
                     invProd.product_order = prod.product_order;
                     invProd.product_weight = prod.product_weight;
+                    invProd.product_weight_list = prod.product_weight_list;
                     invProd.product_is_original = prod.product_is_original;
                     return invProd;
                 });
@@ -209,6 +210,14 @@ export class InvoiceService extends BaseService {
 
         await this._invoiceRepo.save(entity);
 
+        const iProdList = await this._invoiceProductRepo.find({ where: { invoice_id: id } });
+        if (Helpers.isFilledArray(iProdList)) {
+            for (const iProd of iProdList) {
+                iProd.is_deleted = 1;
+            }
+            await this._invoiceProductRepo.save(iProdList);
+        }
+
         return entity;
     }
 
@@ -277,7 +286,7 @@ export class InvoiceService extends BaseService {
     }
 
     public async getCustomerList() {
-        const invoiceList = await this._invoiceRepo.createQueryBuilder('invoice').getMany();
+        const invoiceList = await this._invoiceRepo.createQueryBuilder('invoice').where('invoice.is_deleted = 0').getMany();
         return invoiceList.map((inv) => mapper.map(inv, InvoiceEntity, CustomerDTO));
     }
 

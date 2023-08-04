@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductDTO, ProductStatsDTO } from 'src/dtos';
-import { InvoiceProductEntity, ProductEntity } from 'src/entities';
+import { InvoiceEntity, InvoiceProductEntity, ProductEntity } from 'src/entities';
 import { BaseService } from 'src/includes';
 import { ProductRepository } from 'src/repository';
 import { CONSTANTS, Helpers, mapper } from 'src/utils';
@@ -114,10 +114,11 @@ export class ProductService extends BaseService {
                 InvoiceProductEntity,
                 'invoice_product',
                 `
-                invoice_product.product_id = product.id AND
-                invoice_product.created_date >= :start_date AND
-                invoice_product.created_date <= :end_date
-            `,
+                    invoice_product.product_id = product.id AND
+                    invoice_product.created_date >= :start_date AND
+                    invoice_product.created_date <= :end_date AND
+                    invoice_product.is_deleted = 0
+                `,
                 {
                     start_date: `${params.start_date} 00:00:00`,
                     end_date: `${params.end_date} 23:59:59`,
