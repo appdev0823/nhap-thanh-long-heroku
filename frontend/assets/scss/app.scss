@@ -191,14 +191,8 @@ app-invoice-print {
 }
 
 @media print {
-    html {
-        position: relative;
-    }
-
     body {
         margin: 0 auto;
-        position: absolute;
-        top: 0;
         // width: 80mm !important;
         // max-width: 80mm !important;
         // min-width: 80mm !important;
