@@ -80,7 +80,7 @@ export class InvoiceService extends BaseService {
         const query = this._invoiceRepo
             .createQueryBuilder('invoice')
             .select('invoice.*')
-            .addSelect('DATE_FORMAT(invoice.created_date, \'%d/%m/%Y %h:%i:%s\') as created_date')
+            .addSelect('DATE_FORMAT(invoice.created_date, \'%d/%m/%Y %H:%i:%s\') as created_date')
             .addSelect('user.name', 'user_name')
             .leftJoin('m_users', 'user', 'invoice.created_by = user.username')
             .where('invoice.is_deleted = 0');

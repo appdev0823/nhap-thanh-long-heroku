@@ -191,10 +191,17 @@ app-invoice-print {
 }
 
 @media print {
+    html {
+        position: relative;
+    }
+
     body {
-        width: 80mm !important;
-        max-width: 80mm !important;
-        min-width: 80mm !important;
+        margin: 0 auto;
+        position: absolute;
+        top: 0;
+        // width: 80mm !important;
+        // max-width: 80mm !important;
+        // min-width: 80mm !important;
     }
 
     app-toast,
@@ -205,17 +212,17 @@ app-invoice-print {
     }
 
     app-invoice-print {
-        display: block !important;
+        display: unset !important;
 
-        font-weight: 700;
+        font-weight: bolder;
         // font-size: 2.25rem;
         // line-height: 3.5rem;
 
         .table> :not(caption)>*>* {
-            padding-top: 0.3rem;
-            padding-bottom: 0.3rem;
-            padding-left: 0.5rem;
-            padding-right: 0.5rem;
+            padding-top: 0.3rem !important;
+            padding-bottom: 0.3rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
         }
 
         // .table td,
