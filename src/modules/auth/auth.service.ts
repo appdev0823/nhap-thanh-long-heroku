@@ -48,4 +48,18 @@ export class AuthService extends BaseService {
 
         return mapper.map(user, UserEntity, UserDTO);
     }
+
+    public async changePassword(username: string, oldPassword: string, newPassword: string) {
+        if (!Helpers.isString(username) || !Helpers.isString(oldPassword) || !Helpers.isString(newPassword)) return false;
+
+        const user = await this._userRepo.findOneBy({ username });
+        if (Helpers.isEmptyObject(user)) return false;
+
+        if (user.password !== oldPassword) return false;
+
+        user.password = newPassword;
+        await this._userRepo.save(user);
+
+        return true;
+    }
 }

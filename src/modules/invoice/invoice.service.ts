@@ -38,6 +38,7 @@ export class InvoiceService extends BaseService {
             invoice.weight_grid = JSON.stringify(data.weight_grid);
             invoice.total_price = data.total_price;
             invoice.total_weight = data.total_weight;
+            invoice.depreciation_weight = data.depreciation_weight;
             invoice.created_by = data.created_by;
 
             await this._invoiceRepo.save(invoice);
@@ -177,6 +178,7 @@ export class InvoiceService extends BaseService {
         result.customer_id = invoice.customer_id;
         result.customer_name = invoice.customer_name;
         result.total_weight = invoice.total_weight;
+        result.depreciation_weight = invoice.depreciation_weight;
         result.total_price = invoice.total_price;
         result.is_paid = invoice.is_paid;
         result.is_deleted = invoice.is_deleted;

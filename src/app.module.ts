@@ -18,6 +18,10 @@ import { ProductController } from './modules/product/product.controller';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { CONSTANTS } from './utils';
+import ROUTES from './modules/routes';
+import { AuthController } from './modules/auth/auth.controller';
+import { SettingController } from './modules/setting/setting.controller';
+import { SettingModule } from './modules/setting/setting.module';
 
 @Module({
     imports: [
@@ -33,6 +37,7 @@ import { CONSTANTS } from './utils';
         UserModule,
         ProductModule,
         InvoiceModule,
+        SettingModule,
         TypeOrmModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
@@ -65,6 +70,7 @@ export class AppModule {
      * Configure middlewares
      */
     configure(consumer: MiddlewareConsumer) {
-        consumer.apply(AuthMiddleware).forRoutes(UserController, ProductController, InvoiceController);
+        consumer.apply(AuthMiddleware).exclude(`/${ROUTES.AUTH.MODULE}/${ROUTES.AUTH.LOGIN}`).forRoutes(AuthController);
+        consumer.apply(AuthMiddleware).forRoutes(UserController, ProductController, InvoiceController, SettingController);
     }
 }

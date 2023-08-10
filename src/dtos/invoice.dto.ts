@@ -16,6 +16,7 @@ export class InvoiceSaveDTO {
     product_list: InvoiceProductDTO[] = [];
     total_price = 0;
     total_weight = 0;
+    depreciation_weight = 0;
     created_by = '';
 }
 
@@ -25,6 +26,7 @@ export class InvoiceDTO {
     @AutoMap() customer_name: string;
     @AutoMap() weight_grid: string;
     @AutoMap() total_weight: number;
+    @AutoMap() depreciation_weight: number;
     @AutoMap() total_price: number;
     @AutoMap() is_paid: 0 | 1;
     @AutoMap() is_deleted: 0 | 1;
@@ -52,6 +54,7 @@ export class InvoiceDetailDTO {
     ];
     product_list: InvoiceProductDTO[] = [];
     total_weight = 0;
+    depreciation_weight = 0;
     total_price = 0;
     is_paid = 1;
     is_deleted = 0;
@@ -64,6 +67,7 @@ export class InvoiceDetailDTO {
 export class InvoiceDateStatsDTO {
     date = '';
     total_weight = 0;
+    depreciation_weight = 0;
     total_price = 0;
 }
 

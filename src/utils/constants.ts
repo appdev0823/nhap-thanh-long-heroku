@@ -17,7 +17,11 @@ const CONSTANTS = {
         ADMIN: 1,
     },
     MYSQL_DATETIME_FORMAT: 'YYYY-MM-DD HH:mm:ss',
-    FRONTEND_DIR: 'frontend'
+    FRONTEND_DIR: 'frontend',
+    SETTING_FIELD_NAMES: {
+        INVOICE_ADDRESS: 'invoice_address',
+        INVOICE_PHONE: 'invoice_phone',
+    },
 } as const;
 Helpers.deepFreeze(CONSTANTS);
 

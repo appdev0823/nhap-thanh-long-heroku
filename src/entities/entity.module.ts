@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity, ProductEntity, InvoiceEntity, InvoiceProductEntity } from './index';
+import { InvoiceEntity, InvoiceProductEntity, ProductEntity, SettingEntity, UserEntity } from './index';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity, ProductEntity, InvoiceEntity, InvoiceProductEntity])],
+    imports: [TypeOrmModule.forFeature([UserEntity, ProductEntity, InvoiceEntity, InvoiceProductEntity, SettingEntity])],
     exports: [TypeOrmModule],
 })
 export class EntityModule {}

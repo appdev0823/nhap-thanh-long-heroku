@@ -32,7 +32,10 @@
         "footer_text": "Vui lòng liên hệ 0369999952 để được hỗ trợ",
         "change_password": "Đổi mật khẩu",
         "logout": "Đăng xuất",
-        "save": "Lưu"
+        "save": "Lưu",
+        "old_password": "Mật khẩu cũ",
+        "new_password": "Mật khẩu mới",
+        "confirm_new_password": "Xác nhận mật khẩu mới"
     },
     "validation": {
         "required": "Vui lòng nhập {{item}}",
@@ -40,7 +43,8 @@
         "maxlength": "Độ dài phải nhỏ hơn {{num}}",
         "min": "{{name}} phải lớn hơn {{num}}",
         "max": "{{name}} phải nhỏ hơn {{num}}",
-        "password": "{{field}} không chứa ký tự đặc biệt và khoảng trắng."
+        "password": "{{field}} không chứa ký tự đặc biệt.",
+        "match": "\"{{name1}}\" và \"{{name2}}\" phải giống nhau."
     },
     "message": {
         "success": "Thành công",

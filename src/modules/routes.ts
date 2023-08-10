@@ -4,6 +4,7 @@ const ROUTES = {
     AUTH: {
         MODULE: 'auth',
         LOGIN: 'login',
+        CHANGE_PASSWORD: 'change-password',
     },
     USER: {
         MODULE: 'user',
@@ -34,6 +35,11 @@ const ROUTES = {
         DETAIL: ':id',
         CREATE: '',
         DELETE: ':id',
+    },
+    SETTING: {
+        MODULE: 'setting',
+        GET_LIST_BY_FIELD_NAME_LIST: 'list-by-field-name-list',
+        UPDATE_MULTIPLE: 'update-multiple',
     },
 } as const;
 Helpers.deepFreeze(ROUTES);
